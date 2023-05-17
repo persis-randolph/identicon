@@ -8,20 +8,10 @@ defmodule Identicon do
   Documentation for `Identicon`.
   """
 
-  @doc """
-    Takes a string and converts it into a unique, repeatable Identicon.
-
-  ## Examples
-
-      iex> Identicon.main("banana")
-      %Identicon.Image{
-        hex: [114, 179, 2, 191, 41, 122, 34, 138, 117, 115, 1, 35, 239, 239, 124, 65]
-      }
-
-  """
   def main(input) do
     input
     |> hash_input
+    |> pick_color
   end
 
   @doc """
@@ -40,5 +30,22 @@ defmodule Identicon do
     |> :binary.bin_to_list
 
     %Identicon.Image{hex: hex}
+  end
+
+  @doc """
+    Takes a hex image input and returns the rgb values using the first 3 elements in the hex.
+
+  ## Examples
+
+        iex> image = Identicon.hash_input("banana")
+        iex> Identicon.pick_color(image)
+        %Identicon.Image{
+          hex: [114, 179, 2, 191, 41, 122, 34, 138, 117, 115, 1, 35, 239, 239, 124, 65],
+          color: {114, 179, 2}
+        }
+
+  """
+  def pick_color(%Identicon.Image{hex: [r, g, b | _tail]} = image) do
+    %Identicon.Image{image | color: {r, g, b}}
   end
 end
