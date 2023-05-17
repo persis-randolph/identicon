@@ -12,6 +12,7 @@ defmodule Identicon do
     input
     |> hash_input
     |> pick_color
+    |> build_grid
   end
 
   @doc """
@@ -33,7 +34,7 @@ defmodule Identicon do
   end
 
   @doc """
-    Takes a hex image input and returns the rgb values using the first 3 elements in the hex.
+    Takes the image struct and adds a color property using the first three elements as the r, g, and b values.
 
   ## Examples
 
@@ -47,5 +48,17 @@ defmodule Identicon do
   """
   def pick_color(%Identicon.Image{hex: [r, g, b | _tail]} = image) do
     %Identicon.Image{image | color: {r, g, b}}
+  end
+
+  def build_grid(%Identicon.Image{hex: hex} = image) do
+    hex
+    |> Enum.chunk(3)
+    |> Enum.map(&mirror_row/1)
+  end
+
+  def mirror_row(row) do
+    [first, second | _tail] = row
+
+    row ++ [second, first]
   end
 end
