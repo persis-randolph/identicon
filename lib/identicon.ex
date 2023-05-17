@@ -9,12 +9,14 @@ defmodule Identicon do
   """
 
   @doc """
-    Takes a string, converts it to a MD5 hash of the string, etc...
+    Takes a string and converts it into a unique, repeatable Identicon.
 
   ## Examples
 
       iex> Identicon.main("banana")
-      [114, 179, 2, 191, 41, 122, 34, 138, 117, 115, 1, 35, 239, 239, 124, 65]
+      %Identicon.Image{
+        hex: [114, 179, 2, 191, 41, 122, 34, 138, 117, 115, 1, 35, 239, 239, 124, 65]
+      }
 
   """
   def main(input) do
@@ -23,16 +25,20 @@ defmodule Identicon do
   end
 
   @doc """
-    Takes a string input and converts it to a MD5 hash of the string.
+    Takes a string input, converts it to a MD5 hash, and returns it as a hex image.
 
   ## Examples
 
       iex> Identicon.hash_input("banana")
-      [114, 179, 2, 191, 41, 122, 34, 138, 117, 115, 1, 35, 239, 239, 124, 65]
+      %Identicon.Image{
+        hex: [114, 179, 2, 191, 41, 122, 34, 138, 117, 115, 1, 35, 239, 239, 124, 65]
+      }
 
   """
   def hash_input(input) do
-    :crypto.hash(:md5, input)
+    hex = :crypto.hash(:md5, input)
     |> :binary.bin_to_list
+
+    %Identicon.Image{hex: hex}
   end
 end
